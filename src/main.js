@@ -5,12 +5,20 @@ import './plugins/element.js'
 import './assets/css/global.css'
 import './assets/fonts/iconfont.css'
 import axios from 'axios'
+
 axios.defaults.baseURL = 'https://lianghj.top:8888/api/private/v1/'
     //这是配置请求的根目录
+axios.interceptors.request.use((config) => {
+    //本区域是预处理登录 增加token，并且绑定一令牌[Authorization]
+    config.headers.Authorization = window.sessionStorage.getItem('token')
+        //挂载请求头    
+        //在最后必须return
 
+    return config
+})
 Vue.config.productionTip = false
 Vue.prototype.$http = axios
 new Vue({
     router,
-    render: h => h(App)
+    render: (h) => h(App),
 }).$mount('#app')
